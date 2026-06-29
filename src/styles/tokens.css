@@ -1,0 +1,74 @@
+/* BORNO Design System - CSS Custom Properties */
+
+:root {
+  /* Colors */
+  --purple-50: #f5f3ff;
+  --purple-100: #ede9fe;
+  --purple-200: #ddd6fe;
+  --purple-300: #c4b5fd;
+  --purple-400: #a78bfa;
+  --purple-500: #8b5cf6;
+  --purple-600: #7c3aed;
+  --purple-700: #6d28d9;
+  --purple-800: #5b21b4;
+  --purple-900: #4c1d95;
+
+  --blue-500: #3b82f6;
+  --cyan-500: #06b6d4;
+  --pink-500: #ec4899;
+  --rose-500: #f43f5e;
+
+  /* Semantic */
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: rgba(255, 255, 255, 0.03);
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.05);
+  --ring: #8b5cf6;
+
+  /* Glass morphism */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-dark-bg: rgba(0, 0, 0, 0.25);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #a855f7, #8b5cf6, #7c3aed);
+  --gradient-accent: linear-gradient(135deg, #3b82f6, #06b6d4);
+  --gradient-rainbow: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4);
+
+  /* Animation durations */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+
+  /* Border radius */
+  --radius: 16px;
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 2px);
+  --radius-2xl: calc(var(--radius) + 4px);
+  --radius-3xl: calc(var(--radius) + 8px);
+
+  /* Shadows */
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
+  --shadow-glow-lg: 0 0 40px rgba(139, 92, 246, 0.2);
+
+  /* Blur values */
+  --blur-xs: 4px;
+  --blur-sm: 8px;
+  --blur-md: 16px;
+  --blur-lg: 24px;
+  --blur-xl: 32px;
+
+  /* Z-index */
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-tooltip: 1600;
+  --z-notification: 1700;
+}
