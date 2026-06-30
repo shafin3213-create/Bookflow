@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-// PDF parsing via pdf-parse (function-based API) - works in Vercel serverless
+// PDF parsing via pdf-parse using require() for build-safe serverless compatibility
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
@@ -293,16 +293,15 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
     console.log("[API] Buffer created, length:", buffer.length);
 
-    // Parse PDF - using function-based API for Vercel/serverless compatibility
+    // Parse PDF - using pdf-parse v1.1.1 (serverless-safe, no browser dependencies)
     let text = "";
     try {
-      console.log("[API] Parsing PDF with pdf-parse...");
+      console.log("[API] Parsing PDF with pdf-parse v1.1.1...");
       console.log("[API] Buffer type check:", Buffer.isBuffer(buffer), "length:", buffer.length);
 
-      // Dynamic import to avoid ESM loading issues in Vercel serverless
-      // Using the function-based API (pdfParse.default) instead of class-based
-      // to avoid DOMMatrix/canvas browser API errors in Node.js environment
-      const pdfParse = (await import("pdf-parse")).default;
+      // Use function-based API for clean Node.js-native serverless compatibility
+      // pdf-parse v1.1.1 has no canvas/browser dependencies (no DOMMatrix issues)
+      const pdfParse = require("pdf-parse");
       const pdfData = await pdfParse(buffer);
       text = pdfData.text || "";
       console.log("[API] PDF parsed successfully, text length:", text.length);
