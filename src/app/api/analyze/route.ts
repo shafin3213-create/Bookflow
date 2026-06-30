@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-// PDF parsing via pdf-parse using require() for build-safe serverless compatibility
+// PDF parsing via pdf-parse v1.1.1 (serverless-safe, no browser dependencies)
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+
+// Patch pdf-parse to avoid ENOENT error in serverless:
+// The index.js has isDebugMode = !module.parent which is true in Vercel (module.parent is null)
+// This causes it to try loading ./test/data/05-versions-space.pdf which may not exist in production
+// We directly require the lib/pdf-parse.js to bypass this debug code
+let pdfParse: (data: Buffer, options?: any) => Promise<{ text: string; numpages: number; info: any; metadata: any }>;
+try {
+  // Skip the buggy index.js by directly loading the core lib
+  pdfParse = require("pdf-parse/lib/pdf-parse.js");
+} catch (e) {
+  // Fallback to main entry if lib path differs
+  pdfParse = require("pdf-parse");
+}
 
 // Text safety utilities
 function containsValidText(text: string): boolean {
@@ -299,9 +312,8 @@ export async function POST(request: NextRequest) {
       console.log("[API] Parsing PDF with pdf-parse v1.1.1...");
       console.log("[API] Buffer type check:", Buffer.isBuffer(buffer), "length:", buffer.length);
 
-      // Use function-based API for clean Node.js-native serverless compatibility
-      // pdf-parse v1.1.1 has no canvas/browser dependencies (no DOMMatrix issues)
-      const pdfParse = require("pdf-parse");
+      // pdf-parse v1.1.1 uses function-based API with no canvas/browser dependencies (no DOMMatrix issues)
+      // We pre-loaded the lib directly to bypass the debug-mode ENOENT issue
       const pdfData = await pdfParse(buffer);
       text = pdfData.text || "";
       console.log("[API] PDF parsed successfully, text length:", text.length);
