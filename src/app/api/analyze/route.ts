@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PDFParse, PasswordException, InvalidPDFException } from "pdf-parse";
+// Import PDFParse - using dynamic import for Vercel compatibility
+// The older pdf-parse import pattern doesn't work correctly in ESM/serverless
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
@@ -249,6 +250,10 @@ Analyze this book text with a casual, fascinating, story-like tone. Fill the str
 }
 
 export async function POST(request: NextRequest) {
+  // Log environment state at request time for debugging
+  console.log("[API] Environment check - GEMINI_API_KEY exists:", !!process.env.GEMINI_API_KEY);
+  console.log("[API] Environment check - ALL env keys:", Object.keys(process.env).filter(k => k.includes('GEMINI') || k.includes('API')).join(', '));
+
   try {
     console.log("[API] Received POST request");
     const formData = await request.formData();
@@ -289,28 +294,37 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
     console.log("[API] Buffer created, length:", buffer.length);
 
-    // Parse PDF
+    // Parse PDF - using dynamic import for Vercel/serverless compatibility
     let text = "";
     try {
       console.log("[API] Parsing PDF with pdf-parse...");
       console.log("[API] Buffer type check:", Buffer.isBuffer(buffer), "length:", buffer.length);
+
+      // Dynamic import to avoid ESM loading issues in Vercel serverless
+      const { PDFParse, PasswordException, InvalidPDFException } = await import("pdf-parse");
       const pdfParser = new PDFParse({ data: buffer });
       const pdfData = await pdfParser.getText();
       text = pdfData.text || "";
       console.log("[API] PDF parsed successfully, text length:", text.length);
-      await pdfParser.destroy(); // Clean up resources
+      // destroy() is optional - may fail in serverless, wrap in try-catch
+      try {
+        await pdfParser.destroy();
+      } catch (destroyErr) {
+        console.warn("[API] Warning: PDF cleanup failed (non-critical):", destroyErr);
+      }
     } catch (parseError: unknown) {
       const errorMessage = parseError instanceof Error ? parseError.message : String(parseError);
-      console.error("[API] ERROR: PDF parsing failed:", errorMessage);
+      const errorName = parseError instanceof Error ? parseError.constructor.name : "unknown";
+      console.error("[API] ERROR: PDF parsing failed:", errorName, errorMessage);
       console.error("[API] Stack trace:", parseError instanceof Error ? parseError.stack : "N/A");
-      // Handle specific PDF exception types
-      if (parseError instanceof PasswordException) {
+      // Handle specific PDF exception types by name (dynamic imports lose instanceof)
+      if (errorName === "PasswordException" || errorMessage.toLowerCase().includes("password")) {
         return NextResponse.json(
           { error: "This PDF is encrypted. Please upload an unencrypted file.", success: false },
           { status: 400 }
         );
       }
-      if (parseError instanceof InvalidPDFException) {
+      if (errorName === "InvalidPDFException" || errorMessage.toLowerCase().includes("invalid") || errorMessage.toLowerCase().includes("corrupt")) {
         return NextResponse.json(
           { error: "This PDF is corrupted or malformed. Please upload a valid PDF.", success: false },
           { status: 400 }
@@ -393,14 +407,22 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    const errorStack = error instanceof Error ? error.stack : "N/A";
+    const errorStack = error instanceof Error ? error.stack?.split('\n').slice(0, 5).join('\n') : "N/A";
     console.error("[API] ERROR: Analysis failed:", errorMessage);
     console.error("[API] Stack trace:", errorStack);
 
-    // Handle specific API key error
-    if (errorMessage.includes("GEMINI_API_KEY")) {
+    // Handle specific API key error - also check for missing env vars
+    if (errorMessage.includes("GEMINI_API_KEY") || !process.env.GEMINI_API_KEY) {
       return NextResponse.json(
-        { error: "AI service not configured. Please set GEMINI_API_KEY environment variable.", details: errorMessage, success: false },
+        {
+          error: "AI service not configured. Please set GEMINI_API_KEY environment variable.",
+          details: errorMessage,
+          success: false,
+          envDebug: {
+            hasGeminiKey: !!process.env.GEMINI_API_KEY,
+            availableEnvKeys: Object.keys(process.env).filter(k => !k.includes('PRIVATE') && !k.includes('SECRET')).join(', ')
+          }
+        },
         { status: 503 }
       );
     }
