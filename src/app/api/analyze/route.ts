@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-// Import PDFParse - using dynamic import for Vercel compatibility
-// The older pdf-parse import pattern doesn't work correctly in ESM/serverless
+// PDF parsing via pdf-parse (function-based API) - works in Vercel serverless
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
@@ -294,24 +293,19 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
     console.log("[API] Buffer created, length:", buffer.length);
 
-    // Parse PDF - using dynamic import for Vercel/serverless compatibility
+    // Parse PDF - using function-based API for Vercel/serverless compatibility
     let text = "";
     try {
       console.log("[API] Parsing PDF with pdf-parse...");
       console.log("[API] Buffer type check:", Buffer.isBuffer(buffer), "length:", buffer.length);
 
       // Dynamic import to avoid ESM loading issues in Vercel serverless
-      const { PDFParse, PasswordException, InvalidPDFException } = await import("pdf-parse");
-      const pdfParser = new PDFParse({ data: buffer });
-      const pdfData = await pdfParser.getText();
+      // Using the function-based API (pdfParse.default) instead of class-based
+      // to avoid DOMMatrix/canvas browser API errors in Node.js environment
+      const pdfParse = (await import("pdf-parse")).default;
+      const pdfData = await pdfParse(buffer);
       text = pdfData.text || "";
       console.log("[API] PDF parsed successfully, text length:", text.length);
-      // destroy() is optional - may fail in serverless, wrap in try-catch
-      try {
-        await pdfParser.destroy();
-      } catch (destroyErr) {
-        console.warn("[API] Warning: PDF cleanup failed (non-critical):", destroyErr);
-      }
     } catch (parseError: unknown) {
       const errorMessage = parseError instanceof Error ? parseError.message : String(parseError);
       const errorName = parseError instanceof Error ? parseError.constructor.name : "unknown";
