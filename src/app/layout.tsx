@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  verification: { google: "f4fsH8HbswK8KOn4BI_9O" },
+  verification: { google: "f4fsH8HbswK8KOn4" },
   title: "BookFlow - Free AI Book Summarizer | PDF Text Extractor",
   description:
     "Instantly summarize any PDF book or textbook online for free using AI. Get accurate chapter-by-chapter summaries, key takeaways, and insights in seconds with BookFlow.",
