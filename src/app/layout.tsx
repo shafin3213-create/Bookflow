@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+// SEO optimized
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -13,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  verification: { google: "verification_token_here" },
   title: "BookFlow - Free AI Book Summarizer | PDF Text Extractor",
   description:
     "Instantly summarize any PDF book or textbook online for free using AI. Get accurate chapter-by-chapter summaries, key takeaways, and insights in seconds with BookFlow.",
