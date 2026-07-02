@@ -83,7 +83,7 @@ export function FeatureCards() {
           </motion.div>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 gradient-text-purple">
-            Powerful Features for Modern Authors
+            Powerful AI Tools to Analyze PDFs Instantly
           </h2>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Everything you need to transform your manuscript from a rough draft to a polished masterpiece.

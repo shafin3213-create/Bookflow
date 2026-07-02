@@ -275,10 +275,10 @@ export function UploadZone({ onUploadComplete, onUploadError }: UploadZoneProps)
 
                 <div className="space-y-2">
                   <p className="font-semibold text-xl text-white">
-                    {isDragActive ? "Drop your book here" : "Upload your book"}
+                    {isDragActive ? "Drop your PDF here" : "Upload your PDF document"}
                   </p>
                   <p className="text-gray-400 max-w-sm">
-                    Drag & drop PDF files, or click to browse. Max 50MB.
+                    Drag & drop your files here or click to browse. Max 50MB.
                   </p>
                 </div>
 

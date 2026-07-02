@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from '@next/third-parties/google';
 import "./globals.css";
 
 // SEO optimized
@@ -14,46 +15,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  verification: { google: "f4fsH8HbswK8KOn4" },
-  title: "BookFlow - Free AI Book Summarizer | PDF Text Extractor",
-  description:
-    "Instantly summarize any PDF book or textbook online for free using AI. Get accurate chapter-by-chapter summaries, key takeaways, and insights in seconds with BookFlow.",
-  keywords:
-    "AI book summarizer, PDF text extractor, book summary, free AI tool, textbook summarizer, chapter summary, key takeaways, AI analysis",
-  authors: [{ name: "BookFlow" }],
-  creator: "BookFlow",
-  publisher: "BookFlow",
-  robots: {
-    index: true,
-    follow: true,
-  },
+  title: "BookFlow | Best AI PDF Analyzer & Document Summarizer",
+  description: "Analyze your PDFs instantly with BookFlow. Extract insights, summarize long chapters, and chat directly with your documents using advanced AI. 100% free and fast.",
+  keywords: ["pdf analyzer", "ai pdf summarizer", "chat with pdf", "document analyzer", "bookflow", "ai reader"],
   openGraph: {
-    title: "BookFlow - Free AI Book Summarizer | PDF Text Extractor",
-    description:
-      "Instantly summarize any PDF book or textbook online for free using AI. Get accurate chapter-by-chapter summaries, key takeaways, and insights in seconds with BookFlow.",
+    title: "BookFlow | Best AI PDF Analyzer & Document Summarizer",
+    description: "Analyze your PDFs instantly with BookFlow. Extract insights, summarize long chapters, and chat directly with your documents using advanced AI.",
     url: "https://smartbookflow.vercel.app",
-    type: "website",
-    locale: "en_US",
     siteName: "BookFlow",
-    images: [
-      {
-        url: "https://smartbookflow.vercel.app/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "BookFlow - AI Book Summarizer",
-      },
-    ],
+    locale: "en_US",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BookFlow - Free AI Book Summarizer | PDF Text Extractor",
-    description:
-      "Instantly summarize any PDF book or textbook online for free using AI. Get accurate chapter-by-chapter summaries, key takeaways, and insights in seconds.",
-    creator: "@BookFlow",
-    images: ["https://smartbookflow.vercel.app/og-image.png"],
+    title: "BookFlow | Best AI PDF Analyzer & Document Summarizer",
+    description: "Analyze your PDFs instantly with BookFlow. Extract insights, summarize long chapters, and chat directly with your documents using advanced AI.",
   },
-  alternates: {
-    canonical: "https://smartbookflow.vercel.app",
+  verification: {
+    google: "f4fsH8HbswK8KOn4",
   },
 };
 
@@ -69,6 +48,8 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-black text-white">
         {children}
+        {/* Google Analytics */}
+        <GoogleAnalytics gaId="G-BZ70682JJB" />
       </body>
     </html>
   );

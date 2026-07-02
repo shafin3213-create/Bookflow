@@ -60,7 +60,7 @@ export function Hero() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500" />
           </span>
-          <span className="text-sm font-medium text-gray-300">AI-Powered Book Analysis</span>
+          <span className="text-sm font-medium text-gray-300">Advanced AI PDF Analyzer</span>
         </motion.div>
 
         <motion.h1
@@ -69,7 +69,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-violet-500 to-blue-600 bg-clip-text text-transparent text-glow"
         >
-          Transform Your Book Into Flow
+          The Ultimate AI PDF Analyzer & Summarizer
         </motion.h1>
 
         <motion.p
@@ -78,7 +78,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
         >
-          Upload your manuscript and let AI-powered insights help you create, refine, and perfect your book with intelligent analysis and workflow optimization.
+          Upload any document instantly and let our AI PDF analyzer help you extract deep insights, summarize complex chapters, and chat with your data in seconds.
         </motion.p>
       </motion.div>
 
